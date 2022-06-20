@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/100AG_Netz_Werlte20_1.js"></script>
+        <script src="data/100AG_GebaeudeBGF_Werlte20_2.js"></script>
+        <script src="data/70AG_Netz_Werlte20_3.js"></script>
+        <script src="data/70AG_GebaeudeBGF_Werlte20_4.js"></script>
+        <script src="data/40AG_Netz_Werlte20_5.js"></script>
+        <script src="data/40AG_GebaeudeBGF_Werlte20_6.js"></script>
+        <script src="data/Heizzentrale_7.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:18, minZoom:14
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://hawk.de">© HAWK (2022) |</a> <a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a> &middot; <a href="https://carto.com">CARTO basemap</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_CartoLight_0');
+        map.getPane('pane_CartoLight_0').style.zIndex = 400;
+        var layer_CartoLight_0 = L.tileLayer('http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.pn', {
+            pane: 'pane_CartoLight_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 14,
+            maxZoom: 18,
+            minNativeZoom: 0,
+            maxNativeZoom: 22
+        });
+        layer_CartoLight_0;
+        map.addLayer(layer_CartoLight_0);
+        function pop_100AG_Netz_Werlte20_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/pipe-capex annual</th>\
+                        <td>' + (feature.properties['solution/pipe-capex annual'] !== null ? autolinker.link(feature.properties['solution/pipe-capex annual'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/length-factor</th>\
+                        <td>' + (feature.properties['solution/length-factor'] !== null ? autolinker.link(feature.properties['solution/length-factor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diameter-mm</th>\
+                        <td>' + (feature.properties['solution/diameter-mm'] !== null ? autolinker.link(feature.properties['solution/diameter-mm'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/losses-kwh</th>\
+                        <td>' + (feature.properties['solution/losses-kwh'] !== null ? autolinker.link(feature.properties['solution/losses-kwh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diversity</th>\
+                        <td>' + (feature.properties['solution/diversity'] !== null ? autolinker.link(feature.properties['solution/diversity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/pipe-capex present</th>\
+                        <td>' + (feature.properties['solution/pipe-capex present'] !== null ? autolinker.link(feature.properties['solution/pipe-capex present'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">path/length</th>\
+                        <td>' + (feature.properties['path/length'] !== null ? autolinker.link(feature.properties['path/length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">THERMOS100AG_solution/capacity-kw</th>\
+                        <td>' + (feature.properties['THERMOS100AG_solution/capacity-kw'] !== null ? autolinker.link(feature.properties['THERMOS100AG_solution/capacity-kw'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Länge</th>\
+                        <td>' + (feature.properties['Länge'] !== null ? autolinker.link(feature.properties['Länge'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_100AG_Netz_Werlte20_1_0(feature) {
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 25.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 32.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 32.000000 && feature.properties['solution/diameter-mm'] <= 40.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 40.000000 && feature.properties['solution/diameter-mm'] <= 50.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 50.000000 && feature.properties['solution/diameter-mm'] <= 65.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 65.000000 && feature.properties['solution/diameter-mm'] <= 80.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 80.000000 && feature.properties['solution/diameter-mm'] <= 100.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 100.000000 && feature.properties['solution/diameter-mm'] <= 125.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 6.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 125.000000 && feature.properties['solution/diameter-mm'] <= 150.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 7.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 150.000000 && feature.properties['solution/diameter-mm'] <= 200.000000 ) {
+                return {
+                pane: 'pane_100AG_Netz_Werlte20_1',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 8.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_100AG_Netz_Werlte20_1');
+        map.getPane('pane_100AG_Netz_Werlte20_1').style.zIndex = 401;
+        map.getPane('pane_100AG_Netz_Werlte20_1').style['mix-blend-mode'] = 'normal';
+        var layer_100AG_Netz_Werlte20_1 = new L.geoJson(json_100AG_Netz_Werlte20_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_100AG_Netz_Werlte20_1',
+            layerName: 'layer_100AG_Netz_Werlte20_1',
+            pane: 'pane_100AG_Netz_Werlte20_1',
+            onEachFeature: pop_100AG_Netz_Werlte20_1,
+            style: style_100AG_Netz_Werlte20_1_0,
+        });
+        bounds_group.addLayer(layer_100AG_Netz_Werlte20_1);
+        function pop_100AG_GebaeudeBGF_Werlte20_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bauwerksfunktion</th>\
+                        <td>' + (feature.properties['Bauwerksfunktion'] !== null ? autolinker.link(feature.properties['Bauwerksfunktion'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WBedarf_kWh</th>\
+                        <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fläche</th>\
+                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Anschlusszwang</th>\
+                        <td>' + (feature.properties['Anschlusszwang'] !== null ? autolinker.link(feature.properties['Anschlusszwang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_100AG_GebaeudeBGF_Werlte20_2_0() {
+            return {
+                pane: 'pane_100AG_GebaeudeBGF_Werlte20_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,0,4,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_100AG_GebaeudeBGF_Werlte20_2');
+        map.getPane('pane_100AG_GebaeudeBGF_Werlte20_2').style.zIndex = 402;
+        map.getPane('pane_100AG_GebaeudeBGF_Werlte20_2').style['mix-blend-mode'] = 'normal';
+        var layer_100AG_GebaeudeBGF_Werlte20_2 = new L.geoJson(json_100AG_GebaeudeBGF_Werlte20_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_100AG_GebaeudeBGF_Werlte20_2',
+            layerName: 'layer_100AG_GebaeudeBGF_Werlte20_2',
+            pane: 'pane_100AG_GebaeudeBGF_Werlte20_2',
+            onEachFeature: pop_100AG_GebaeudeBGF_Werlte20_2,
+            style: style_100AG_GebaeudeBGF_Werlte20_2_0,
+        });
+        bounds_group.addLayer(layer_100AG_GebaeudeBGF_Werlte20_2);
+        function pop_70AG_Netz_Werlte20_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/pipe-capex annual</th>\
+                        <td>' + (feature.properties['solution/pipe-capex annual'] !== null ? autolinker.link(feature.properties['solution/pipe-capex annual'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/length-factor</th>\
+                        <td>' + (feature.properties['solution/length-factor'] !== null ? autolinker.link(feature.properties['solution/length-factor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diameter-mm</th>\
+                        <td>' + (feature.properties['solution/diameter-mm'] !== null ? autolinker.link(feature.properties['solution/diameter-mm'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/losses-kwh</th>\
+                        <td>' + (feature.properties['solution/losses-kwh'] !== null ? autolinker.link(feature.properties['solution/losses-kwh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diversity</th>\
+                        <td>' + (feature.properties['solution/diversity'] !== null ? autolinker.link(feature.properties['solution/diversity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">path/length</th>\
+                        <td>' + (feature.properties['path/length'] !== null ? autolinker.link(feature.properties['path/length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/capacity-kw</th>\
+                        <td>' + (feature.properties['solution/capacity-kw'] !== null ? autolinker.link(feature.properties['solution/capacity-kw'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Länge</th>\
+                        <td>' + (feature.properties['Länge'] !== null ? autolinker.link(feature.properties['Länge'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_70AG_Netz_Werlte20_3_0(feature) {
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 25.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 32.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 32.000000 && feature.properties['solution/diameter-mm'] <= 40.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 40.000000 && feature.properties['solution/diameter-mm'] <= 50.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 50.000000 && feature.properties['solution/diameter-mm'] <= 65.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 65.000000 && feature.properties['solution/diameter-mm'] <= 80.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 80.000000 && feature.properties['solution/diameter-mm'] <= 100.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 100.000000 && feature.properties['solution/diameter-mm'] <= 125.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 6.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 125.000000 && feature.properties['solution/diameter-mm'] <= 150.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 7.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 150.000000 && feature.properties['solution/diameter-mm'] <= 200.000000 ) {
+                return {
+                pane: 'pane_70AG_Netz_Werlte20_3',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 8.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_70AG_Netz_Werlte20_3');
+        map.getPane('pane_70AG_Netz_Werlte20_3').style.zIndex = 403;
+        map.getPane('pane_70AG_Netz_Werlte20_3').style['mix-blend-mode'] = 'normal';
+        var layer_70AG_Netz_Werlte20_3 = new L.geoJson(json_70AG_Netz_Werlte20_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_70AG_Netz_Werlte20_3',
+            layerName: 'layer_70AG_Netz_Werlte20_3',
+            pane: 'pane_70AG_Netz_Werlte20_3',
+            onEachFeature: pop_70AG_Netz_Werlte20_3,
+            style: style_70AG_Netz_Werlte20_3_0,
+        });
+        bounds_group.addLayer(layer_70AG_Netz_Werlte20_3);
+        function pop_70AG_GebaeudeBGF_Werlte20_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bauwerksfunktion</th>\
+                        <td>' + (feature.properties['Bauwerksfunktion'] !== null ? autolinker.link(feature.properties['Bauwerksfunktion'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WBedarf_kWh</th>\
+                        <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fläche</th>\
+                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Anschlusszwang</th>\
+                        <td>' + (feature.properties['Anschlusszwang'] !== null ? autolinker.link(feature.properties['Anschlusszwang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_70AG_GebaeudeBGF_Werlte20_4_0() {
+            return {
+                pane: 'pane_70AG_GebaeudeBGF_Werlte20_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,129,129,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_70AG_GebaeudeBGF_Werlte20_4');
+        map.getPane('pane_70AG_GebaeudeBGF_Werlte20_4').style.zIndex = 404;
+        map.getPane('pane_70AG_GebaeudeBGF_Werlte20_4').style['mix-blend-mode'] = 'normal';
+        var layer_70AG_GebaeudeBGF_Werlte20_4 = new L.geoJson(json_70AG_GebaeudeBGF_Werlte20_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_70AG_GebaeudeBGF_Werlte20_4',
+            layerName: 'layer_70AG_GebaeudeBGF_Werlte20_4',
+            pane: 'pane_70AG_GebaeudeBGF_Werlte20_4',
+            onEachFeature: pop_70AG_GebaeudeBGF_Werlte20_4,
+            style: style_70AG_GebaeudeBGF_Werlte20_4_0,
+        });
+        bounds_group.addLayer(layer_70AG_GebaeudeBGF_Werlte20_4);
+        function pop_40AG_Netz_Werlte20_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/pipe-capex annual</th>\
+                        <td>' + (feature.properties['solution/pipe-capex annual'] !== null ? autolinker.link(feature.properties['solution/pipe-capex annual'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/length-factor</th>\
+                        <td>' + (feature.properties['solution/length-factor'] !== null ? autolinker.link(feature.properties['solution/length-factor'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diameter-mm</th>\
+                        <td>' + (feature.properties['solution/diameter-mm'] !== null ? autolinker.link(feature.properties['solution/diameter-mm'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/losses-kwh</th>\
+                        <td>' + (feature.properties['solution/losses-kwh'] !== null ? autolinker.link(feature.properties['solution/losses-kwh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">solution/diversity</th>\
+                        <td>' + (feature.properties['solution/diversity'] !== null ? autolinker.link(feature.properties['solution/diversity'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">path/length</th>\
+                        <td>' + (feature.properties['path/length'] !== null ? autolinker.link(feature.properties['path/length'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">THERMOS40AG_solution/capacity-kw</th>\
+                        <td>' + (feature.properties['THERMOS40AG_solution/capacity-kw'] !== null ? autolinker.link(feature.properties['THERMOS40AG_solution/capacity-kw'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Länge</th>\
+                        <td>' + (feature.properties['Länge'] !== null ? autolinker.link(feature.properties['Länge'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_40AG_Netz_Werlte20_5_0(feature) {
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 25.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 25.000000 && feature.properties['solution/diameter-mm'] <= 32.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 32.000000 && feature.properties['solution/diameter-mm'] <= 40.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 40.000000 && feature.properties['solution/diameter-mm'] <= 50.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 50.000000 && feature.properties['solution/diameter-mm'] <= 65.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 65.000000 && feature.properties['solution/diameter-mm'] <= 80.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 80.000000 && feature.properties['solution/diameter-mm'] <= 100.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 100.000000 && feature.properties['solution/diameter-mm'] <= 125.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 6.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 125.000000 && feature.properties['solution/diameter-mm'] <= 150.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 7.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['solution/diameter-mm'] >= 150.000000 && feature.properties['solution/diameter-mm'] <= 200.000000 ) {
+                return {
+                pane: 'pane_40AG_Netz_Werlte20_5',
+                opacity: 1,
+                color: 'rgba(124,0,21,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 8.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_40AG_Netz_Werlte20_5');
+        map.getPane('pane_40AG_Netz_Werlte20_5').style.zIndex = 405;
+        map.getPane('pane_40AG_Netz_Werlte20_5').style['mix-blend-mode'] = 'normal';
+        var layer_40AG_Netz_Werlte20_5 = new L.geoJson(json_40AG_Netz_Werlte20_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_40AG_Netz_Werlte20_5',
+            layerName: 'layer_40AG_Netz_Werlte20_5',
+            pane: 'pane_40AG_Netz_Werlte20_5',
+            onEachFeature: pop_40AG_Netz_Werlte20_5,
+            style: style_40AG_Netz_Werlte20_5_0,
+        });
+        bounds_group.addLayer(layer_40AG_Netz_Werlte20_5);
+        map.addLayer(layer_40AG_Netz_Werlte20_5);
+        function pop_40AG_GebaeudeBGF_Werlte20_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Bauwerksfunktion</th>\
+                        <td>' + (feature.properties['Bauwerksfunktion'] !== null ? autolinker.link(feature.properties['Bauwerksfunktion'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">WBedarf_kWh</th>\
+                        <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Fläche</th>\
+                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Anschlusszwang</th>\
+                        <td>' + (feature.properties['Anschlusszwang'] !== null ? autolinker.link(feature.properties['Anschlusszwang'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_40AG_GebaeudeBGF_Werlte20_6_0() {
+            return {
+                pane: 'pane_40AG_GebaeudeBGF_Werlte20_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(169,169,169,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_40AG_GebaeudeBGF_Werlte20_6');
+        map.getPane('pane_40AG_GebaeudeBGF_Werlte20_6').style.zIndex = 406;
+        map.getPane('pane_40AG_GebaeudeBGF_Werlte20_6').style['mix-blend-mode'] = 'normal';
+        var layer_40AG_GebaeudeBGF_Werlte20_6 = new L.geoJson(json_40AG_GebaeudeBGF_Werlte20_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_40AG_GebaeudeBGF_Werlte20_6',
+            layerName: 'layer_40AG_GebaeudeBGF_Werlte20_6',
+            pane: 'pane_40AG_GebaeudeBGF_Werlte20_6',
+            onEachFeature: pop_40AG_GebaeudeBGF_Werlte20_6,
+            style: style_40AG_GebaeudeBGF_Werlte20_6_0,
+        });
+        bounds_group.addLayer(layer_40AG_GebaeudeBGF_Werlte20_6);
+        map.addLayer(layer_40AG_GebaeudeBGF_Werlte20_6);
+        function pop_Heizzentrale_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Heizzentrale_7_0() {
+            return {
+                pane: 'pane_Heizzentrale_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,0,21,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Heizzentrale_7');
+        map.getPane('pane_Heizzentrale_7').style.zIndex = 407;
+        map.getPane('pane_Heizzentrale_7').style['mix-blend-mode'] = 'normal';
+        var layer_Heizzentrale_7 = new L.geoJson(json_Heizzentrale_7, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Heizzentrale_7',
+            layerName: 'layer_Heizzentrale_7',
+            pane: 'pane_Heizzentrale_7',
+            onEachFeature: pop_Heizzentrale_7,
+            style: style_Heizzentrale_7_0,
+        });
+        bounds_group.addLayer(layer_Heizzentrale_7);
+        map.addLayer(layer_Heizzentrale_7);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Heizzentrale_7.png" /> Heizzentrale': layer_Heizzentrale_7,'<img src="legend/40AG_GebaeudeBGF_Werlte20_6.png" /> 40AG_GebaeudeBGF_Werlte20': layer_40AG_GebaeudeBGF_Werlte20_6,'40AG_Netz_Werlte2.0<br /><table><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_250.png" /></td><td>25</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_321.png" /></td><td>32</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_402.png" /></td><td>40</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_503.png" /></td><td>50</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_654.png" /></td><td>65</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_805.png" /></td><td>80</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_1006.png" /></td><td>100</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_1257.png" /></td><td>125</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_1508.png" /></td><td>150</td></tr><tr><td style="text-align: center;"><img src="legend/40AG_Netz_Werlte20_5_2009.png" /></td><td>200</td></tr></table>': layer_40AG_Netz_Werlte20_5,'<img src="legend/70AG_GebaeudeBGF_Werlte20_4.png" /> 70AG_GebaeudeBGF_Werlte20': layer_70AG_GebaeudeBGF_Werlte20_4,'70AG_Netz_Werlte2.0<br /><table><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_250.png" /></td><td>25</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_321.png" /></td><td>32</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_402.png" /></td><td>40</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_503.png" /></td><td>50</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_654.png" /></td><td>65</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_805.png" /></td><td>80</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_1006.png" /></td><td>100</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_1257.png" /></td><td>125</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_1508.png" /></td><td>150</td></tr><tr><td style="text-align: center;"><img src="legend/70AG_Netz_Werlte20_3_2009.png" /></td><td>200</td></tr></table>': layer_70AG_Netz_Werlte20_3,'<img src="legend/100AG_GebaeudeBGF_Werlte20_2.png" /> 100AG_GebaeudeBGF_Werlte20': layer_100AG_GebaeudeBGF_Werlte20_2,'100AG_Netz_Werlte2.0<br /><table><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_250.png" /></td><td>25</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_321.png" /></td><td>32</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_402.png" /></td><td>40</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_503.png" /></td><td>50</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_654.png" /></td><td>65</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_805.png" /></td><td>80</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_1006.png" /></td><td>100</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_1257.png" /></td><td>125</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_1508.png" /></td><td>150</td></tr><tr><td style="text-align: center;"><img src="legend/100AG_Netz_Werlte20_1_2009.png" /></td><td>200</td></tr></table>': layer_100AG_Netz_Werlte20_1,"Carto Light": layer_CartoLight_0,}).addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"solution/diameter-mm": "int","WBedarf_kWh": "real","Anschlusszwang": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_solutiondiametermm = document.createElement("div");
+            div_solutiondiametermm.id = "div_solutiondiametermm";
+            div_solutiondiametermm.className = "slider";
+            document.getElementById("menu").appendChild(div_solutiondiametermm);
+            var lab_solutiondiametermm = document.createElement('div');
+            lab_solutiondiametermm.innerHTML  = 'solution/diameter-mm: <span id="val_solutiondiametermm"></span>';
+            lab_solutiondiametermm.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_solutiondiametermm);
+            var reset_solutiondiametermm = document.createElement('div');
+            reset_solutiondiametermm.innerHTML = 'clear filter';
+            reset_solutiondiametermm.className = 'filterlabel';
+            lab_solutiondiametermm.className = 'filterlabel';
+            reset_solutiondiametermm.onclick = function() {
+                sel_solutiondiametermm.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_solutiondiametermm);
+            var sel_solutiondiametermm = document.getElementById('div_solutiondiametermm');
+            noUiSlider.create(sel_solutiondiametermm, {
+                connect: true,
+                start: [25, 200],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 25,
+                max: 200
+                }
+            });
+            sel_solutiondiametermm.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_solutiondiametermm = document.getElementById('val_solutiondiametermm');
+            val_solutiondiametermm.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_WBedarf_kWh = document.createElement("div");
+            div_WBedarf_kWh.id = "div_WBedarf_kWh";
+            div_WBedarf_kWh.className = "slider";
+            document.getElementById("menu").appendChild(div_WBedarf_kWh);
+            var lab_WBedarf_kWh = document.createElement('div');
+            lab_WBedarf_kWh.innerHTML  = 'WBedarf_kWh: <span id="val_WBedarf_kWh"></span>';
+            lab_WBedarf_kWh.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_WBedarf_kWh);
+            var reset_WBedarf_kWh = document.createElement('div');
+            reset_WBedarf_kWh.innerHTML = 'clear filter';
+            reset_WBedarf_kWh.className = 'filterlabel';
+            lab_WBedarf_kWh.className = 'filterlabel';
+            reset_WBedarf_kWh.onclick = function() {
+                sel_WBedarf_kWh.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_WBedarf_kWh);
+            var sel_WBedarf_kWh = document.getElementById('div_WBedarf_kWh');
+            noUiSlider.create(sel_WBedarf_kWh, {
+                connect: true,
+                start: [6295.0, 5211000.0],
+                range: {
+                min: 6295.0,
+                max: 5211000.0
+                }
+            });
+            sel_WBedarf_kWh.noUiSlider.on('update', function (values) {
+            val_WBedarf_kWh = document.getElementById('val_WBedarf_kWh');
+            val_WBedarf_kWh.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Anschlusszwang = document.createElement('div');
+            div_Anschlusszwang.id = "div_Anschlusszwang";
+            div_Anschlusszwang.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Anschlusszwang);
+            sel_Anschlusszwang = document.createElement('select');
+            sel_Anschlusszwang.multiple = true;
+            sel_Anschlusszwang.size = 2;
+            sel_Anschlusszwang.id = "sel_Anschlusszwang";
+            var Anschlusszwang_options_str = "<option value='' unselected></option>";
+            sel_Anschlusszwang.onchange = function(){filterFunc()};
+            Anschlusszwang_options_str  += '<option value="Ja">Ja</option>';
+            Anschlusszwang_options_str  += '<option value="Nein">Nein</option>';
+            sel_Anschlusszwang.innerHTML = Anschlusszwang_options_str;
+            div_Anschlusszwang.appendChild(sel_Anschlusszwang);
+            var lab_Anschlusszwang = document.createElement('div');
+            lab_Anschlusszwang.innerHTML = 'Anschlusszwang';
+            lab_Anschlusszwang.className = 'filterlabel';
+            div_Anschlusszwang.appendChild(lab_Anschlusszwang);
+            var reset_Anschlusszwang = document.createElement('div');
+            reset_Anschlusszwang.innerHTML = 'clear filter';
+            reset_Anschlusszwang.className = 'filterlabel';
+            reset_Anschlusszwang.onclick = function() {
+                var options = document.getElementById("sel_Anschlusszwang").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Anschlusszwang.appendChild(reset_Anschlusszwang);
+        </script>
+    </body>
+</html>
