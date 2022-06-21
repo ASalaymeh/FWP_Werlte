@@ -321,8 +321,8 @@
                         <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Fläche</th>\
-                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Grundfläche</th>\
+                        <td>' + (feature.properties['Grundfläche'] !== null ? autolinker.link(feature.properties['Grundfläche'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Anschlusszwang</th>\
@@ -578,8 +578,8 @@
                         <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Fläche</th>\
-                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Grundfläche</th>\
+                        <td>' + (feature.properties['Grundfläche'] !== null ? autolinker.link(feature.properties['Grundfläche'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Anschlusszwang</th>\
@@ -836,8 +836,8 @@
                         <td>' + (feature.properties['WBedarf_kWh'] !== null ? autolinker.link(feature.properties['WBedarf_kWh'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Fläche</th>\
-                        <td>' + (feature.properties['Fläche'] !== null ? autolinker.link(feature.properties['Fläche'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Grundfläche</th>\
+                        <td>' + (feature.properties['Grundfläche'] !== null ? autolinker.link(feature.properties['Grundfläche'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Anschlusszwang</th>\
@@ -887,7 +887,11 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Objekt'] !== null ? autolinker.link(feature.properties['Objekt'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -905,7 +909,7 @@
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(124,0,21,1.0)',
-                interactive: false,
+                interactive: true,
             }
         }
         map.createPane('pane_Heizzentrale_7');
@@ -913,7 +917,7 @@
         map.getPane('pane_Heizzentrale_7').style['mix-blend-mode'] = 'normal';
         var layer_Heizzentrale_7 = new L.geoJson(json_Heizzentrale_7, {
             attribution: '',
-            interactive: false,
+            interactive: true,
             dataVar: 'json_Heizzentrale_7',
             layerName: 'layer_Heizzentrale_7',
             pane: 'pane_Heizzentrale_7',
